@@ -16,12 +16,12 @@ struct my_msg {
 };
 
 int main() {
-  int msgid = msgget(12345, IPC_CREAT | 0666);
-  if (msgid == -1) {
+  int msqid = msgget(12345, IPC_CREAT | 0666);
+  if (msqid == -1) {
     printf("Ошибка создания очереди\n");
     return 1;
   }
-  printf("Очередь успешно создана; ID=%d\n", msgid);
+  printf("Очередь успешно создана; ID=%d\n", msqid);
 
   FILE* fp1 = popen("ps -u grigorijmironov -o pid= | head -100 | xargs", "r");
   if (fp1 == NULL) {
@@ -35,7 +35,7 @@ int main() {
   fgets(msg1.mtext, sizeof(msg1.mtext), fp1);
   pclose(fp1);
 
-  if (msgsnd(msgid, &msg1, strlen(msg1.mtext) + 1, IPC_NOWAIT) == -1) {
+  if (msgsnd(msqid, &msg1, strlen(msg1.mtext) + 1, IPC_NOWAIT) == -1) {
     printf("Ошибка msgsnd 1\n");
     return 1;
   }
@@ -53,7 +53,7 @@ int main() {
   fgets(msg2.mtext, sizeof(msg2.mtext), fp2);
   pclose(fp2);
 
-  if (msgsnd(msgid, &msg2, strlen(msg2.mtext) + 1, IPC_NOWAIT) == -1) {
+  if (msgsnd(msqid, &msg2, strlen(msg2.mtext) + 1, IPC_NOWAIT) == -1) {
     printf("Ошибка msgsnd 2\n");
     return 1;
   }
@@ -74,7 +74,7 @@ int main() {
   fgets(msg3.mtext, sizeof(msg3.mtext), fp3);
   pclose(fp3);
 
-  if (msgsnd(msgid, &msg3, strlen(msg3.mtext) + 1, IPC_NOWAIT) == -1) {
+  if (msgsnd(msqid, &msg3, strlen(msg3.mtext) + 1, IPC_NOWAIT) == -1) {
     printf("Ошибка msgsnd 3\n");
     return 1;
   }
@@ -92,7 +92,7 @@ int main() {
   fgets(msg4.mtext, sizeof(msg4.mtext), fp4);
   pclose(fp4);
 
-  if (msgsnd(msgid, &msg4, strlen(msg4.mtext) + 1, IPC_NOWAIT) == -1) {
+  if (msgsnd(msqid, &msg4, strlen(msg4.mtext) + 1, IPC_NOWAIT) == -1) {
     printf("Ошибка msgsnd 4\n");
     return 1;
   }

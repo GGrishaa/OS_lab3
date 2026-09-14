@@ -14,27 +14,27 @@ struct my_msg {
 };
 
 int main() {
-  int msgid = msgget(12345, 0);
-  if (msgid == -1) {
+  int msqid = msgget(12345, 0);
+  if (msqid == -1) {
     printf("Очередь с ключом 12345 не найдена, ожидаем 60 секунд\n");
     sleep(60);
-    msgid = msgget(12345, 0);
-    if (msgid == -1) {
+    msqid = msgget(12345, 0);
+    if (msqid == -1) {
       printf("Очередь с ключом 12345 не найдена\n");
       return 1;
     }
   }
 
   struct my_msg msg3;
-  if (msgrcv(msgid, &msg3, sizeof(msg3.mtext), 3, IPC_NOWAIT) == -1) {
+  if (msgrcv(msqid, &msg3, sizeof(msg3.mtext), 3, IPC_NOWAIT) == -1) {
     if (errno == ENOMSG)
-      printf("Ошибка прочтения третьего сообщения из очереди\n");
+      printf("Третьего сообщения в очереди нет\n");
     else
       printf("Ошибка получения третьего сообщения\n");
   } else
-    printf("Содержимое третьего сообщения: %s\n", msg3.mtext);
+    printf("Содержимое третьего сообщения: %s", msg3.mtext);
 
-  if (msgctl(msgid, IPC_RMID, NULL) == -1) {
+  if (msgctl(msqid, IPC_RMID, NULL) == -1) {
     printf("Ошибка удаления очереди сообщений\n");
     return 1;
   }

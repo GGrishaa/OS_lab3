@@ -42,7 +42,7 @@ clean:
 	(ipcs -q | grep -q 3039) && ipcrm -Q 12345 || true
 	clear
 
-rebuild: clean all
+rebuild: clean all run
 
 stat:
 	ipcs -q
